@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
+  <title>Market Charts</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <select id="ticker-select"></select>
+    <div id="ranges">
+      <button class="range active" data-range="1Y">1Y</button>
+      <button class="range" data-range="3Y">3Y</button>
+      <button class="range" data-range="5Y">5Y</button>
+      <button class="range" data-range="10Y">10Y</button>
+      <button class="range" data-range="20Y">20Y</button>
+      <button class="range" data-range="MAX">MAX</button>
+    </div>
+    <div id="smas">
+      <label style="color:#f59e0b"><input type="checkbox" data-sma="50"> SMA 50</label>
+      <label style="color:#10b981"><input type="checkbox" data-sma="100"> SMA 100</label>
+      <label style="color:#ef4444"><input type="checkbox" data-sma="200" checked> SMA 200</label>
+      <label style="color:#8b5cf6"><input type="checkbox" data-sma="250"> SMA 250</label>
+      <label style="color:#06b6d4"><input type="checkbox" data-sma="300"> SMA 300</label>
+    </div>
+  </header>
+  <div id="status"></div>
+  <div id="chart"></div>
+  <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

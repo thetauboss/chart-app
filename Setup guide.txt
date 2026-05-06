@@ -1,0 +1,52 @@
+claude --resume aefee6c8-f59c-41fe-8e15-4273392c8508
+
+ Setup guide
+
+  Step 1 — Install Git
+
+  Go to git-scm.com/download/win, download, and run the installer. Click Next through everything — defaults are fine.
+
+  Step 2 — Create a GitHub repository
+
+  1. Go to github.com → click + (top right) → New repository
+  2. Name it chart-app (or anything you like)
+  3. Set to Public
+  4. Leave everything else unchecked → Create repository
+
+  Step 3 — Push the files
+
+  Open PowerShell (Windows key → type powershell → Enter) and run these commands one by one. Replace YOUR_USERNAME with
+  your GitHub username:
+
+  cd "C:\Users\t_per\Desktop\Tobias\Coding\Claude\Log-App"
+  git init
+  git add .
+  git commit -m "Initial commit"
+  git branch -M main
+  git remote add origin https://github.com/YOUR_USERNAME/chart-app.git
+  git push -u origin main
+
+  When git push runs, a browser window will open asking you to log in to GitHub. Do that and the push completes
+  automatically.
+
+  Step 4 — Enable GitHub Pages
+
+  1. Go to your repo on GitHub → Settings → Pages (left sidebar)
+  2. Under Source: select Deploy from a branch
+  3. Branch: main | Folder: / (root) → Save
+
+  Step 5 — Enable Actions write permission
+
+  1. Still in Settings → Actions → General
+  2. Scroll to Workflow permissions → select Read and write permissions → Save
+
+  Step 6 — Fetch the first data
+
+  1. Go to your repo → Actions tab
+  2. Click Update Market Data → Run workflow → Run workflow
+  3. Wait ~30 seconds for it to complete
+
+  Done
+
+  Your app is live at:
+  https://YOUR_USERNAME.github.io/chart-app
