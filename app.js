@@ -45,7 +45,7 @@ function buildChart() {
       mode: LightweightCharts.PriceScaleMode.Logarithmic,
       borderColor: '#e5e7eb',
     },
-    timeScale: { borderColor: '#e5e7eb' },
+    timeScale: { borderColor: '#e5e7eb', minBarSpacing: 0.1 },
   });
 
   priceSeries = chart.addAreaSeries({
@@ -126,7 +126,7 @@ function render() {
     smaSeries[period] = s;
   });
 
-  chart.timeScale().fitContent();
+  setTimeout(() => chart.timeScale().fitContent(), 0);
 }
 
 init();
