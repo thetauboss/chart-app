@@ -1,6 +1,6 @@
 let chart, priceSeries, smaSeries = {};
 let allData = null;
-let currentRange = '1Y';
+let currentRange = '10Y';
 
 const SMA_COLORS = { 50: '#f59e0b', 100: '#10b981', 200: '#ef4444', 250: '#8b5cf6', 300: '#06b6d4' };
 
