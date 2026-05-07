@@ -43,7 +43,6 @@ function buildChart() {
     grid: { vertLines: { color: '#f3f4f6' }, horzLines: { color: '#f3f4f6' } },
     leftPriceScale: {
       visible: true,
-      mode: LightweightCharts.PriceScaleMode.Percentage,
       borderColor: '#e5e7eb',
       scaleMargins: { top: 0.1, bottom: 0.1 },
     },
@@ -71,6 +70,11 @@ function buildChart() {
     priceLineVisible: false,
     lastValueVisible: false,
     crosshairMarkerVisible: false,
+    priceFormat: {
+      type: 'custom',
+      formatter: val => (val >= 0 ? '+' : '') + val.toFixed(1) + '%',
+      minMove: 0.1,
+    },
   });
 }
 
@@ -124,7 +128,9 @@ function render() {
 
   const { dates, values: closes } = sliceByRange(allData.dates, allData.closes, currentRange);
   priceSeries.setData(toPoints(dates, closes));
-  pctSeries.setData(toPoints(dates, closes));
+  const base = closes.find(c => c != null);
+  const pctValues = closes.map(c => c != null ? (c / base - 1) * 100 : null);
+  pctSeries.setData(toPoints(dates, pctValues));
 
   Object.values(smaSeries).forEach(s => chart.removeSeries(s));
   smaSeries = {};
