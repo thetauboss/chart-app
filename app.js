@@ -150,7 +150,7 @@ function render() {
     smaSeries[period] = s;
   });
 
-  setTimeout(() => chart.timeScale().fitContent(), 0);
+  chart.timeScale().setVisibleRange({ from: dates[0], to: dates[dates.length - 1] });
 }
 
 init();
