@@ -1,4 +1,4 @@
-let chart, priceSeries, pctSeries, smaSeries = {};
+let chart, priceSeries, smaSeries = {};
 let allData = null;
 let currentRange = '20Y';
 
@@ -41,11 +41,6 @@ function buildChart() {
     autoSize: true,
     layout: { background: { color: '#fff' }, textColor: '#374151' },
     grid: { vertLines: { color: '#f3f4f6' }, horzLines: { color: '#f3f4f6' } },
-    leftPriceScale: {
-      visible: true,
-      borderColor: '#e5e7eb',
-      scaleMargins: { top: 0.1, bottom: 0.1 },
-    },
     rightPriceScale: {
       mode: LightweightCharts.PriceScaleMode.Logarithmic,
       borderColor: '#e5e7eb',
@@ -55,26 +50,11 @@ function buildChart() {
   });
 
   priceSeries = chart.addAreaSeries({
-    priceScaleId: 'right',
     lineColor: '#2563eb',
     topColor: 'rgba(37,99,235,0.1)',
     bottomColor: 'rgba(37,99,235,0)',
     lineWidth: 2,
     priceLineVisible: false,
-  });
-
-  pctSeries = chart.addLineSeries({
-    priceScaleId: 'left',
-    color: 'rgba(0,0,0,0)',
-    lineWidth: 0,
-    priceLineVisible: false,
-    lastValueVisible: false,
-    crosshairMarkerVisible: false,
-    priceFormat: {
-      type: 'custom',
-      formatter: val => (val >= 0 ? '+' : '') + val.toFixed(1) + '%',
-      minMove: 0.1,
-    },
   });
 }
 
@@ -123,14 +103,22 @@ function toPoints(dates, values) {
     .filter(p => p.value != null && isFinite(p.value));
 }
 
+function updatePctLabel(closes) {
+  const first = closes.find(c => c != null);
+  const last = [...closes].reverse().find(c => c != null);
+  if (first == null || last == null) return;
+  const pct = (last / first - 1) * 100;
+  const el = document.getElementById('pct-label');
+  el.textContent = (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
+  el.style.color = pct >= 0 ? '#16a34a' : '#dc2626';
+}
+
 function render() {
   if (!allData) return;
 
   const { dates, values: closes } = sliceByRange(allData.dates, allData.closes, currentRange);
   priceSeries.setData(toPoints(dates, closes));
-  const base = closes.find(c => c != null);
-  const pctValues = closes.map(c => c != null ? (c / base - 1) * 100 : null);
-  pctSeries.setData(toPoints(dates, pctValues));
+  updatePctLabel(closes);
 
   Object.values(smaSeries).forEach(s => chart.removeSeries(s));
   smaSeries = {};

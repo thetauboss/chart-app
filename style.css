@@ -94,4 +94,16 @@ header {
 #chart {
   flex: 1;
   min-height: 0;
+  position: relative;
+}
+
+#pct-label {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  font-size: 18px;
+  font-weight: 700;
+  z-index: 10;
+  pointer-events: none;
+  letter-spacing: -0.3px;
 }
