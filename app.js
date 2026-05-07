@@ -103,13 +103,16 @@ function toPoints(dates, values) {
     .filter(p => p.value != null && isFinite(p.value));
 }
 
-function updatePctLabel(closes) {
+function updatePctLabel(closes, dates) {
   const first = closes.find(c => c != null);
   const last = [...closes].reverse().find(c => c != null);
   if (first == null || last == null) return;
   const pct = (last / first - 1) * 100;
+  const years = (new Date(dates[dates.length - 1]) - new Date(dates[0])) / (365.25 * 24 * 60 * 60 * 1000);
+  const cagr = (Math.pow(last / first, 1 / years) - 1) * 100;
+  const sign = pct >= 0 ? '+' : '';
   const el = document.getElementById('pct-label');
-  el.textContent = (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
+  el.textContent = `${sign}${pct.toFixed(1)}%   ${sign}${cagr.toFixed(1)}% p.a.`;
   el.style.color = pct >= 0 ? '#16a34a' : '#dc2626';
 }
 
@@ -118,7 +121,7 @@ function render() {
 
   const { dates, values: closes } = sliceByRange(allData.dates, allData.closes, currentRange);
   priceSeries.setData(toPoints(dates, closes));
-  updatePctLabel(closes);
+  updatePctLabel(closes, dates);
 
   Object.values(smaSeries).forEach(s => chart.removeSeries(s));
   smaSeries = {};
