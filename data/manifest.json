@@ -1,10 +1,12 @@
 {
   "tickers": [
-    { "symbol": "^GSPC",     "label": "S&P 500",   "file": "GSPC" },
-    { "symbol": "^IXIC",     "label": "NASDAQ",     "file": "IXIC" },
-    { "symbol": "^SSMI",     "label": "SMI",        "file": "SSMI" },
-    { "symbol": "CSSPX.SW",  "label": "CSSPX.SW",  "file": "CSSPX.SW" },
-    { "symbol": "XS2D.L",    "label": "XS2D.L",    "file": "XS2D.L" },
-    { "symbol": "SMMCHA.SW", "label": "SMMCHA.SW", "file": "SMMCHA.SW" }
+    { "symbol": "^GSPC",              "label": "S&P 500",    "file": "GSPC" },
+    { "symbol": "^SP500TR",            "label": "S&P 500 TR", "file": "SP500TR" },
+    { "symbol": "^IXIC",              "label": "NASDAQ",     "file": "IXIC" },
+    { "symbol": "^990100-USD-STRD",   "label": "MSCI World", "file": "MSCI_WORLD" },
+    { "symbol": "^892400-USD-STRD",   "label": "MSCI ACWI",  "file": "MSCI_ACWI" },
+    { "symbol": "^SSMI",              "label": "SMI",        "file": "SSMI" },
+    { "symbol": "SMIM.SW",            "label": "SMIM",       "file": "SMIM.SW" },
+    { "symbol": "XS2D.L",             "label": "XS2D",       "file": "XS2D.L" }
   ]
 }

@@ -1,6 +1,6 @@
-let chart, priceSeries, smaSeries = {};
+let chart, priceSeries, pctSeries, smaSeries = {};
 let allData = null;
-let currentRange = '10Y';
+let currentRange = '20Y';
 
 const SMA_COLORS = { 50: '#f59e0b', 100: '#10b981', 200: '#ef4444', 250: '#8b5cf6', 300: '#06b6d4' };
 
@@ -41,19 +41,36 @@ function buildChart() {
     autoSize: true,
     layout: { background: { color: '#fff' }, textColor: '#374151' },
     grid: { vertLines: { color: '#f3f4f6' }, horzLines: { color: '#f3f4f6' } },
+    leftPriceScale: {
+      visible: true,
+      mode: LightweightCharts.PriceScaleMode.Percentage,
+      borderColor: '#e5e7eb',
+      scaleMargins: { top: 0.1, bottom: 0.1 },
+    },
     rightPriceScale: {
       mode: LightweightCharts.PriceScaleMode.Logarithmic,
       borderColor: '#e5e7eb',
+      scaleMargins: { top: 0.1, bottom: 0.1 },
     },
     timeScale: { borderColor: '#e5e7eb', minBarSpacing: 0.1 },
   });
 
   priceSeries = chart.addAreaSeries({
+    priceScaleId: 'right',
     lineColor: '#2563eb',
     topColor: 'rgba(37,99,235,0.1)',
     bottomColor: 'rgba(37,99,235,0)',
     lineWidth: 2,
     priceLineVisible: false,
+  });
+
+  pctSeries = chart.addLineSeries({
+    priceScaleId: 'left',
+    color: 'rgba(0,0,0,0)',
+    lineWidth: 0,
+    priceLineVisible: false,
+    lastValueVisible: false,
+    crosshairMarkerVisible: false,
   });
 }
 
@@ -107,6 +124,7 @@ function render() {
 
   const { dates, values: closes } = sliceByRange(allData.dates, allData.closes, currentRange);
   priceSeries.setData(toPoints(dates, closes));
+  pctSeries.setData(toPoints(dates, closes));
 
   Object.values(smaSeries).forEach(s => chart.removeSeries(s));
   smaSeries = {};

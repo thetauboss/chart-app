@@ -5,12 +5,14 @@ import os
 import time
 
 TICKERS = [
-    {"symbol": "^GSPC",     "file": "GSPC"},
-    {"symbol": "^IXIC",     "file": "IXIC"},
-    {"symbol": "^SSMI",     "file": "SSMI"},
-    {"symbol": "CSSPX.SW",  "file": "CSSPX.SW"},
-    {"symbol": "XS2D.L",    "file": "XS2D.L"},
-    {"symbol": "SMMCHA.SW", "file": "SMMCHA.SW"},
+    {"symbol": "^GSPC",            "file": "GSPC"},
+    {"symbol": "^SP500TR",         "file": "SP500TR"},
+    {"symbol": "^IXIC",            "file": "IXIC"},
+    {"symbol": "^990100-USD-STRD", "file": "MSCI_WORLD"},
+    {"symbol": "^892400-USD-STRD", "file": "MSCI_ACWI"},
+    {"symbol": "^SSMI",            "file": "SSMI"},
+    {"symbol": "SMIM.SW",          "file": "SMIM.SW"},
+    {"symbol": "XS2D.L",           "file": "XS2D.L"},
 ]
 
 os.makedirs("data", exist_ok=True)

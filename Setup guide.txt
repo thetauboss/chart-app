@@ -50,3 +50,14 @@ claude --resume aefee6c8-f59c-41fe-8e15-4273392c8508
 
   Your app is live at:
   https://YOUR_USERNAME.github.io/chart-app
+
+
+For Updates:
+  cd "C:\Users\t_per\Desktop\Tobias\Coding\Claude\Log-App"
+  git add .
+  git commit -m "Update"
+  git push
+
+on error on git push:
+  git pull --rebase origin main
+  git push
