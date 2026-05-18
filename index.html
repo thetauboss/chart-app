@@ -10,6 +10,13 @@
 <body>
   <header>
     <select id="ticker-select"></select>
+    <select id="compare-select">
+      <option value="">— vs. —</option>
+    </select>
+    <div id="scale-toggle">
+      <button class="range active" data-scale="log">Log</button>
+      <button class="range" data-scale="pct">%</button>
+    </div>
     <div id="ranges">
       <button class="range" data-range="1Y">1Y</button>
       <button class="range" data-range="3Y">3Y</button>

@@ -1,6 +1,9 @@
 let chart, priceSeries, smaSeries = {};
 let allData = null;
+let compareData = null;
+let compareSeries = null;
 let currentRange = '20Y';
+let currentScale = 'log';
 
 const SMA_COLORS = { 50: '#f59e0b', 100: '#10b981', 200: '#ef4444', 250: '#8b5cf6', 300: '#06b6d4' };
 
@@ -8,16 +11,21 @@ async function init() {
   const manifest = await fetch('data/manifest.json').then(r => r.json());
 
   const sel = document.getElementById('ticker-select');
+  const cmp = document.getElementById('compare-select');
+
   manifest.tickers.forEach(t => {
     const o = document.createElement('option');
     o.value = t.file;
     o.textContent = t.label;
     sel.appendChild(o);
+    const o2 = o.cloneNode(true);
+    cmp.appendChild(o2);
   });
 
   buildChart();
 
   sel.addEventListener('change', e => loadTicker(e.target.value));
+  cmp.addEventListener('change', e => loadCompare(e.target.value));
 
   document.querySelectorAll('.range').forEach(btn =>
     btn.addEventListener('click', () => {
@@ -30,6 +38,15 @@ async function init() {
 
   document.querySelectorAll('[data-sma]').forEach(cb =>
     cb.addEventListener('change', render)
+  );
+
+  document.querySelectorAll('[data-scale]').forEach(btn =>
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-scale]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentScale = btn.dataset.scale;
+      render();
+    })
   );
 
   if (manifest.tickers.length) loadTicker(manifest.tickers[0].file);
@@ -69,6 +86,18 @@ async function loadTicker(file) {
   } catch {
     setStatus('No data yet — trigger the GitHub Action first (see setup instructions).');
   }
+}
+
+async function loadCompare(file) {
+  if (!file) { compareData = null; render(); return; }
+  try {
+    const res = await fetch(`data/${file}.json`);
+    if (!res.ok) throw new Error();
+    compareData = await res.json();
+  } catch {
+    compareData = null;
+  }
+  render();
 }
 
 function setStatus(msg) {
@@ -116,12 +145,43 @@ function updatePctLabel(closes, dates) {
   el.style.color = pct >= 0 ? '#16a34a' : '#dc2626';
 }
 
+function display(values, base) {
+  if (currentScale === 'pct') return values.map(v => v != null ? (v / base - 1) * 100 : null);
+  if (compareData) return values.map(v => v != null ? (v / base) * 100 : null);
+  return values;
+}
+
 function render() {
   if (!allData) return;
 
   const { dates, values: closes } = sliceByRange(allData.dates, allData.closes, currentRange);
-  priceSeries.setData(toPoints(dates, closes));
+  const base = closes.find(c => c != null);
+
+  chart.applyOptions({
+    rightPriceScale: {
+      mode: currentScale === 'log'
+        ? LightweightCharts.PriceScaleMode.Logarithmic
+        : LightweightCharts.PriceScaleMode.Normal,
+    },
+  });
+
+  priceSeries.setData(toPoints(dates, display(closes, base)));
   updatePctLabel(closes, dates);
+
+  if (compareSeries) { chart.removeSeries(compareSeries); compareSeries = null; }
+
+  if (compareData) {
+    const { dates: cd, values: cc } = sliceByRange(compareData.dates, compareData.closes, currentRange);
+    const cbase = cc.find(c => c != null);
+    compareSeries = chart.addLineSeries({
+      color: '#f97316',
+      lineWidth: 2,
+      priceLineVisible: false,
+      lastValueVisible: false,
+      crosshairMarkerVisible: false,
+    });
+    compareSeries.setData(toPoints(cd, display(cc, cbase)));
+  }
 
   Object.values(smaSeries).forEach(s => chart.removeSeries(s));
   smaSeries = {};
@@ -137,7 +197,7 @@ function render() {
       lastValueVisible: false,
       crosshairMarkerVisible: false,
     });
-    s.setData(toPoints(dates, smaSlice));
+    s.setData(toPoints(dates, display(smaSlice, base)));
     smaSeries[period] = s;
   });
 
