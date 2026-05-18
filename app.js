@@ -27,9 +27,9 @@ async function init() {
   sel.addEventListener('change', e => loadTicker(e.target.value));
   cmp.addEventListener('change', e => loadCompare(e.target.value));
 
-  document.querySelectorAll('.range').forEach(btn =>
+  document.querySelectorAll('[data-range]').forEach(btn =>
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.range').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('[data-range]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       currentRange = btn.dataset.range;
       render();
