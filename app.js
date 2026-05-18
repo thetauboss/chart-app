@@ -157,12 +157,10 @@ function render() {
   const { dates, values: closes } = sliceByRange(allData.dates, allData.closes, currentRange);
   const base = closes.find(c => c != null);
 
-  chart.applyOptions({
-    rightPriceScale: {
-      mode: currentScale === 'log'
-        ? LightweightCharts.PriceScaleMode.Logarithmic
-        : LightweightCharts.PriceScaleMode.Normal,
-    },
+  chart.priceScale('right').applyOptions({
+    mode: currentScale === 'log'
+      ? LightweightCharts.PriceScaleMode.Logarithmic
+      : LightweightCharts.PriceScaleMode.Normal,
   });
 
   priceSeries.setData(toPoints(dates, display(closes, base)));
